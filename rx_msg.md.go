@@ -243,10 +243,34 @@ type rxEventChangeExternalChat struct {
 	ToUserName string `xml:"ToUserName"`
 	// FromUserName 此事件该值固定为sys，表示该消息由系统生成
 	FromUserName string `xml:"FromUserName"`
-	// FailReason 接替失败的原因, customer_refused-客户拒绝， customer_limit_exceed-接替成员的客户数达到上限
-	FailReason string `xml:"FailReason"`
 	// ChatID 群ID
 	ChatID string `xml:"ChatId"`
+	// UpdateDetail 群变更详情
+	// 	变更详情。目前有以下几种：
+	// add_member : 成员入群
+	// del_member : 成员退群
+	// change_owner : 群主变更
+	// change_name : 群名变更
+	// change_notice : 群公告变更
+	UpdateDetail string `xml:"UpdateDetail"`
+	// JoinScene 入群方式。
+	// 当是成员入群时有值。表示成员的入群方式
+	// 0 - 由成员邀请入群（包括直接邀请入群和通过邀请链接入群）
+	// 3 - 通过扫描群二维码入群
+	JoinScene *int `xml:"JoinScene"`
+	// QuitScene 退群方式。
+	// 当是成员退群时有值。表示成员的退群方式
+	// 0 - 自己退群
+	// 1 - 群主/群管理员移出
+	QuitScene *int `xml:"QuitScene"`
+	// MemChangeCnt 成员入退群变更数量。
+	// 当是成员入群或退群时有值。表示成员变更数量
+	MemChangeCnt *int `xml:"MemChangeCnt"`
+	// MemChangeList 成员入退群变更列表。
+	// 当是成员入群或退群时有值。变更的成员列表
+	MemChangeList *[]string `xml:"MemChangeList>Item"`
+	LastMemVer    *string   `xml:"LastMemVer"`
+	CurMemVer     *string   `xml:"CurMemVer"`
 }
 
 // rxEventSysApprovalChange 接收的事件消息，审批申请状态变化回调通知

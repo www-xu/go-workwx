@@ -630,8 +630,26 @@ type EventChangeExternalChat interface {
 	// GetFromUserName 此事件该值固定为sys，表示该消息由系统生成
 	GetFromUserName() string
 
-	// GetFailReason 接替失败的原因, customer_refused-客户拒绝， customer_limit_exceed-接替成员的客户数达到上限
-	GetFailReason() string
+	// GetUpdateDetail 群变更详情
+	GetUpdateDetail() string
+
+	// GetJoinScene 入群方式
+	GetJoinScene() *int
+
+	// GetQuitScene 退群方式
+	GetQuitScene() *int
+
+	// GetMemChangeCnt 成员入退群变更数量
+	GetMemChangeCnt() *int
+
+	// GetMemChangeList 成员入退群变更列表
+	GetMemChangeList() *[]string
+
+	// GetLastMemVer 上次变更的成员列表版本
+	GetLastMemVer() *string
+
+	// GetCurMemVer 当前变更的成员列表版本
+	GetCurMemVer() *string
 }
 
 var _ EventChangeExternalChat = (*rxEventChangeExternalChat)(nil)
@@ -639,11 +657,17 @@ var _ EventChangeExternalChat = (*rxEventChangeExternalChat)(nil)
 func (r *rxEventChangeExternalChat) formatInto(w io.Writer) {
 	_, _ = fmt.Fprintf(
 		w,
-		"ChatID: %#v, ToUserName: %#v, FromUserName: %#v, FailReason: %#v",
+		"ChatID: %#v, ToUserName: %#v, FromUserName: %#v, UpdateDetail: %#v, JoinScene: %#v, QuitScene: %#v, MemChangeCnt: %#v, MemChangeList: %#v, LastMemVer: %#v, CurMemVer: %#v",
 		r.ChatID,
 		r.ToUserName,
 		r.FromUserName,
-		r.FailReason,
+		r.UpdateDetail,
+		r.JoinScene,
+		r.QuitScene,
+		r.MemChangeCnt,
+		r.MemChangeList,
+		r.LastMemVer,
+		r.CurMemVer,
 	)
 }
 
@@ -659,8 +683,32 @@ func (r *rxEventChangeExternalChat) GetFromUserName() string {
 	return r.FromUserName
 }
 
-func (r *rxEventChangeExternalChat) GetFailReason() string {
-	return r.FailReason
+func (r *rxEventChangeExternalChat) GetUpdateDetail() string {
+	return r.UpdateDetail
+}
+
+func (r *rxEventChangeExternalChat) GetJoinScene() *int {
+	return r.JoinScene
+}
+
+func (r *rxEventChangeExternalChat) GetQuitScene() *int {
+	return r.QuitScene
+}
+
+func (r *rxEventChangeExternalChat) GetMemChangeCnt() *int {
+	return r.MemChangeCnt
+}
+
+func (r *rxEventChangeExternalChat) GetMemChangeList() *[]string {
+	return r.MemChangeList
+}
+
+func (r *rxEventChangeExternalChat) GetLastMemVer() *string {
+	return r.LastMemVer
+}
+
+func (r *rxEventChangeExternalChat) GetCurMemVer() *string {
+	return r.CurMemVer
 }
 
 // EventSysApprovalChange 审批申请状态变化回调通知
